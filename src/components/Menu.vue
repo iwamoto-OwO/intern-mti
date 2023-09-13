@@ -1,9 +1,7 @@
 <template>
     <div class="ui secondary pointing green inverted massive menu">
         <router-link active-class="active" class ="item" exact to="/">Home</router-link>
-        <router-link class ="item" to='/user'>User</router-link>
         <router-link class ="item" to="/profile">Profile</router-link>
-        <router-link class ="item" to='/article'>Article</router-link>
         <div class="right menu">
             <a @click="logout" class="item">Logout</a>
         </div>
