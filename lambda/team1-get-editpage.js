@@ -21,7 +21,7 @@ exports.handler = async (event, context) => {
         return response;
     }
 
-    const userId = event.queryStringParameters.userId;;
+    const userId = event.queryStringParameters.userId;
 
     const param = {
         TableName,
