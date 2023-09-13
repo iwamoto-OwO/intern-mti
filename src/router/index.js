@@ -51,6 +51,7 @@ const router = createRouter({
   ]
 })
 
+
 const DEFAULT_TITLE = 'TITLE';
 
 router.afterEach((to) => {

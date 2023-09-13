@@ -8,3 +8,8 @@ const app = createApp(App)
 app.use(router)
 
 app.mount('#app')
+
+/*global $*/
+// $('.ui.dropdown')
+//   .dropdown()
+// ;
