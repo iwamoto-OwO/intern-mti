@@ -8,7 +8,7 @@
                     <div class="field">
                         <label for="pref.city">地域</label>
                         <div class="ui search selection dropdown">
-                            <input type="hidden" name="prefarence">
+                            <input type="hidden" name="prefarence" value="北海道" class="item" data-value="1">
                             <i class="dropdown icon"></i>
                             <div class="default text">都道府県</div>
                             <div class="menu">
@@ -18,7 +18,7 @@
                             </div>
                         </div>
                         <div class="ui fluid search selection dropdown">
-                            <input type="hidden" name="prefarence">
+                            <input type="hidden" name="prefarence" value="札幌市" class="item" data-value="1">
                             <i class="dropdown icon"></i>
                             <div class="default text">市町村</div>
                             <div class="menu">
@@ -33,7 +33,7 @@
                     <div class="field">
                         <label for="allergen">種類</label>
                         <div class="ui fluid search selection dropdown">
-                            <input type="hidden" name="prefarence">
+                            <input type="hidden" name="prefarence" value="スギ" class="item" data-value="1">
                             <i class="dropdown icon"></i>
                             <div class="default text">アレルゲン</div>
                             <div class="menu">
@@ -61,9 +61,9 @@
             </div>
 
             <div>
-            <h2 align="right">投稿件数</h2>
-            <h2 align="right">{{post.num}}</h2>
-            <h2 align="right">件</h2>
+                <h2 align="right">投稿件数</h2>
+                <h2 align="right">{{post.num}}</h2>
+                <h2 align="right">件</h2>
             </div>
             <hr>
             <div class="ui card fluid">
@@ -81,6 +81,10 @@
                             <div class="ui segment">
                                 <div>{{allergen.num}}</div>
                             </div>
+                            <button @click="toggleMode()" class="ui icon button" type="submit">
+                                 <i class="plus icon"></i>
+                                
+                            </button>
                         </li>
                         <hr>
                     </template>
@@ -116,7 +120,8 @@
                     pref: null,
                     city: null,
                     allergen: null,
-                    num:null,
+                    condition: null,
+                    num: null,
                     articles: [],
                 },
                 iam: null,
@@ -128,28 +133,6 @@
 
 
 
-            // 計算した結果を変数として利用したいときはここに記述する
-
-            // filteredUsers() {
-            //     return this.users.filter((e) => {
-            //         // userIdのマッチングチェック
-            //         const matchUserID = this.userId ?
-            //             e.userId?.match(this.userId) :
-            //             true;
-
-            //         // categoryのマッチングチェック
-            //         const matchCategory = this.category ?
-            //             e.category?.match(this.category) :
-            //             true;
-
-            //         // timeの範囲チェック
-            //         const withinTimeRange =
-            //             (this.start ? e.time >= this.start : true) &&
-            //             (this.end ? e.time <= this.end : true);
-
-            //         return matchUserID && withinTimeRange;
-            //     });
-            // },
 
         },
 
@@ -236,19 +219,16 @@
             //     }
 
             // },
-            // Vue.jsで使う関数はここで記述する
-            // isMyArticle(id) {}, // 自分の記事かどうかを判定する
-            // async getArticles() {}, // 記事一覧を取得する
-            // async postArticle() {}, // 記事を作成する
+
             async getSearchedArticles() {
-                const { userId, pref,city, allergen } = this.search;
+                const { userId, pref, city, allergen } = this.search;
                 // const starttimestamp = start ? new Date(start).getTime() : "";
                 // const endtimestamp = end ? new Date(end).getTime() : "";
                 // const qs = "prefarence=" + prefarence + "City=" + city + "&allergen=" + (allergen ? allergen : "") + "&start=" + starttimestamp + "&end=" + endtimestamp;
 
                 try {
 
-                    const res = await fetch(baseUrl + "/Article?" + qs, {
+                    const res = await fetch(baseUrl + "/articles?" + qs, {
                         method: "GET",
                         headers,
                     });
