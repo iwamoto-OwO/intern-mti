@@ -79,7 +79,8 @@ exports.handler = async (event, context) => {
         sympton,
         medicine,
         text,
-        timestamp
+        timestamp,
+        condition,
         }),
     };
     
@@ -91,7 +92,7 @@ exports.handler = async (event, context) => {
         await client.send(command);
         // TODO: 登録に成功した場合の処理を記載する。(status codeの設定と、response bodyの設定)
         response.statusCode = 201;
-        response.body = JSON.stringify({ userId, text, timestamp, allergen,sympton});
+        response.body = JSON.stringify({ userId, text, timestamp, allergen,sympton,condition});
         console.log(response.body);
 
     }
