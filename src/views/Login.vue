@@ -6,6 +6,9 @@
       <div class="ui red message" v-if="sameError">
         同じアレルゲンが重複入力されています
       </div>
+      <div class="ui red message" v-if="valueError">
+        必須データがありません
+      </div>
       <form class="ui large form" @submit.prevent="submit">
         
         <div class="field">
@@ -25,7 +28,7 @@
         
         <div class="field" v-if="!isLogin">
           <select class="ui dropdown" v-model="user.pref">
-            <option disabled value="">都道府県</option>
+            <option disabled value="">都道府県(必須)</option>
             <option value="1">北海道</option>
             <option value="2">青森</option>
           </select>
@@ -33,7 +36,7 @@
         
         <div class="field" v-if="this.user.pref==1&&!isLogin">
           <select class="ui dropdown" placeholder="市区町村" v-model="user.city" v-bind:disabled="!this.user.pref">
-            <option disabled value="">市区町村</option>
+            <option disabled value="">市区町村(必須)</option>
             <option value="1">札幌市</option>
             <option value="2">函館市</option>
           </select>
@@ -41,7 +44,7 @@
         
         <div class="field" v-if="this.user.pref==2&&!isLogin">
           <select class="ui dropdown" placeholder="市区町村" v-model="user.city" v-bind:disabled="!this.user.pref">
-            <option disabled value="">市区町村</option>
+            <option disabled value="">市区町村(必須)</option>
             <option value="1">青森市</option>
             <option value="2">弘前市</option>
           </select>
@@ -51,7 +54,7 @@
           <div class="ui two column grid">
             <div class="column">
               <select class="ui dropdown" placeholder="アレルゲン" v-model="user.allergen1">
-                <option disabled value="">アレルゲン</option>
+                <option disabled value="">アレルゲン(必須)</option>
                 <option value="1">スギ</option>
                 <option value="2">ヒノキ</option>
                 <option value="3">ブタクサ</option>
@@ -63,7 +66,7 @@
             </div>
             <div class="column">
               <select class="ui dropdown" placeholder="症状レベル" v-model="user.level1" v-bind:disabled="!this.user.allergen1">
-                <option disabled value="">症状レベル</option>
+                <option disabled value="">症状レベル(必須)</option>
                 <option value="1">軽症</option>
                 <option value="2">中等症</option>
                 <option value="3">重症</option>
@@ -72,6 +75,10 @@
             </div>
           </div>
         </div>
+        
+        <!--<div class="field" v-if="!isLogin">-->
+        <!--  <p>症状レベル：</p>-->
+        <!--</div>-->
         
         <div class="field" v-if="!isLogin">
           <div class="ui two column grid">
@@ -286,6 +293,7 @@
       return {
         isLogin: true,
         sameError: false,
+        valueError:false,
         user: {
           userId: null,
           password: null,
@@ -358,6 +366,38 @@
           return
         }
         this.sameError=false;
+        
+        if(this.user.userId==null){
+          this.valueError=true;
+          window.scroll({top: 0, behavior: 'smooth'});
+          return
+        }
+        if(this.user.password==null){
+          this.valueError=true;
+          window.scroll({top: 0, behavior: 'smooth'});
+          return
+        }
+        if(this.user.pref==null){
+          this.valueError=true;
+          window.scroll({top: 0, behavior: 'smooth'});
+          return
+        }
+        if(this.user.city==null){
+          this.valueError=true;
+          window.scroll({top: 0, behavior: 'smooth'});
+          return
+        }
+        if(this.user.allergen1==null){
+          this.valueError=true;
+          window.scroll({top: 0, behavior: 'smooth'});
+          return
+        }
+        if(this.user.level1==null){
+          this.valueError=true;
+          window.scroll({top: 0, behavior: 'smooth'});
+          return
+        }
+        
         if (this.isLogin) {
       
           
