@@ -1,4 +1,4 @@
-<<template>
+<template>
   <div>
     <div class="ui main container">
       <!-- 基本的なコンテンツはここに記載する -->
@@ -8,28 +8,30 @@
               <i class="icon edit huge"></i>
             </button>
       </div>
+      
         
-      <div class="ui segment modalWindow-background" v-if="postingScreen">
+      <!--<div class="ui segment modalWindow-background" v-if="postingScreen">-->
+        <div class="ui segment modalWindow-background view">
         
-        
-        <div class="modalWindow-content">
-          <button class="circular ui icon button tiny right floated" @click="posting_screen_hide()">
-            <i class="icon close icon"></i>
-          </button>
+            <div class="modalWindow-content">
+              <button class="circular ui icon button tiny right floated" @click="posting_screen_hide()">
+                <i class="icon close icon"></i>
+              </button>
+              
+              <span class="ui center floated">今日の花粉症状はどうですか？</span>
+              <button class="circular ui icon button small" @click="posting_screen_hide()">
+                <i class="icon question icon tiny"></i>
+              </button>
           
-          <span class="ui center floated">今日の花粉症状はどうですか？</span>
-          <button class="circular ui icon button small" @click="posting_screen_hide()">
-            <i class="icon question icon tiny"></i>
-          </button>
-          
-          
+          <!--conditionの値確認用
+          <h2 class="ui gray header">{{post.condition}}</h2>-->
 
             <div class="condition-button">
-              <input type="radio" id="1" name="condition"><label for="1" class="blue">大丈夫</label>
-              <input type="radio" id="2" name="condition"><label for="2" class="green">微かに感じる</label>
-              <input type="radio" id="3" name="condition"><label for="3" class="yellow">ちょっと辛い</label>
-              <input type="radio" id="4" name="condition"><label for="4" class="orange">辛い</label>
-              <input type="radio" id="5" name="condition"><label for="5" class="red">著しく辛い</label>
+              <input type="radio" id="1" name="condition" value="1" v-model="post.condition"><label for="1" class="blue">大丈夫</label>
+              <input type="radio" id="2" name="condition" value="2" v-model="post.condition"><label for="2" class="green">微かに感じる</label>
+              <input type="radio" id="3" name="condition" value="3" v-model="post.condition"><label for="3" class="yellow">ちょっと辛い</label>
+              <input type="radio" id="4" name="condition" value="4" v-model="post.condition"><label for="4" class="orange">辛い</label>
+              <input type="radio" id="5" name="condition" value="5" v-model="post.condition"><label for="5" class="red">著しく辛い</label>
           </div>
   
               
@@ -43,173 +45,122 @@
               </button>
             </div>
             
-            <div></div>
-            
-            <div class="more-field" v-if="viewMore">
-              
-              <div class="ui grid">
-                <div class="three wide column">
-                  <div class="ui label fs08" style="fontsize:0.8em">
-                        地域
-                  </div>
+            <div class="more-field hide">
+
+                <div class="ui label fs08" style="fontsize:0.8em">
+                    地域
                 </div>
-                <div class="three wide column">
-                  <div class="ui selection dropdown"> 
-                     <input type="hidden" v-model="post.pref"> <i class="dropdown icon"></i> 
-                     <div class="default text">
-                      県
-                     </div> 
+                    <div class="ui selection dropdown"> 
+                     <input type="hidden" id="prefSelect" v-model="post.pref"> <i class="dropdown icon"></i> 
+                     <div class="default text">都道府県</div> 
                      <div class="menu"> 
-                      <div class="item" data-value="1">
-                       北海道
-                      </div> 
-                      <div class="item" data-value="2">
-                       青森
-                      </div> 
+                          <div class="item" value="北海道">北海道</div> 
+                          <div class="item" value="青森">青森</div> 
                      </div> 
                   </div>
-                </div>
                   
-                <div class="three wide column">
+                  <h2 class="ui gray header">{{post.pref}}</h2>
                
-                  <div class="ui selection dropdown"> 
-                     <input type="hidden" v-model="post.pref"> <i class="dropdown icon"></i> 
-                     <div class="default text">
-                      市区町村
-                     </div> 
+                   <div class="ui selection dropdown"> 
+                     <input type="hidden" id="prefSelect"  v-model="post.city"> <i class="dropdown icon"></i> 
+                     <div class="default text">市区町村</div> 
                      <div class="menu"> 
-                      <div class="item" data-value="1">
-                       北海道
-                      </div> 
-                      <div class="item" data-value="2">
-                       青森
-                      </div> 
+                          <div class="item" value="札幌市">札幌市</div> 
+                          <div class="item" value="函館市">函館市</div> 
                      </div> 
                   </div>
-                </div>
-              </div>
               
               
-              <div class="ui grid">
-                <div class="three wide column">
-                  <div class="ui label fs08" style="fontsize:0.8em">
+                    <div class="ui label fs08" style="fontsize:0.8em">
                         アレルゲン
-                  </div>
+                  　</div>
                   
-                </div>
-                <div class="three wide column">
-                  <div class="ui selection dropdown"> 
-                     <input type="hidden" v-model="post.pref"> <i class="dropdown icon"></i> 
-    
-                     <div class="menu"> 
-                      <div class="item" data-value="1">
-                       北海道
-                      </div> 
-                      <div class="item" data-value="2">
-                       青森
-                      </div> 
-                     </div> 
-                  </div>
+                  　<div class="ui selection dropdown"> 
+                        <input type="hidden" v-model="post.allergen1"> <i class="dropdown icon"></i> 
+                        <div class="default text">
+                            アレルゲン１
+                        </div> 
+                        <div class="menu"> 
+                            <option value="スギ">スギ</option>
+                            <option value="ヒノキ">ヒノキ</option>
+                            <option value="ブタクサ">ブタクサ</option>
+                            <option value="イネ科">イネ科</option>
+                        </div> 
+                　　</div>
     
                   <div class="ui selection dropdown"> 
-                     <input type="hidden" v-model="post.pref"> <i class="dropdown icon"></i> 
-    
-                     <div class="menu"> 
-                      <div class="item" data-value="1">
-                       北海道
-                      </div> 
-                      <div class="item" data-value="2">
-                       青森
-                      </div> 
-                     </div> 
+                     <input type="hidden" v-model="post.allergen2"> <i class="dropdown icon"></i> 
+                        <div class="default text">
+                            アレルゲン２
+                        </div> 
+                         <div class="menu"> 
+                            <option value="スギ">スギ</option>
+                            <option value="ヒノキ">ヒノキ</option>
+                            <option value="ブタクサ">ブタクサ</option>
+                            <option value="イネ科">イネ科</option>
+                        </div> 
                   </div>
-                  
-                </div>
-                <div class="three wide column">
+
                   <div class="ui selection dropdown"> 
-                     <input type="hidden" v-model="post.pref"> <i class="dropdown icon"></i> 
+                     <input type="hidden" v-model="post.allergen3"> <i class="dropdown icon"></i> 
+                     <div class="default text">
+                            アレルゲン３
+                    </div> 
                      <div class="menu"> 
-                      <div class="item" data-value="1">
-                       北海道
-                      </div> 
-                      <div class="item" data-value="2">
-                       青森
-                      </div> 
-                     </div> 
+                            <option value="スギ">スギ</option>
+                            <option value="ヒノキ">ヒノキ</option>
+                            <option value="ブタクサ">ブタクサ</option>
+                            <option value="イネ科">イネ科</option>
+                        </div> 
                   </div>
-                </div>
-              </div>
               
-              <div class="ui grid">
-                <div class="three wide column">
+
                   <div class="ui label fs08" style="fontsize:0.8em">
                         症状
                   </div>
-                </div>
-                
                   <div class="ui selection dropdown"> 
-                     <input type="hidden" v-model="post.pref"> <i class="dropdown icon"></i> 
+                     <input type="hidden" v-model="post.symptom1"> <i class="dropdown icon"></i> 
     
                      <div class="menu"> 
-                      <div class="item" data-value="1">
-                       北海道
-                      </div> 
-                      <div class="item" data-value="2">
-                       青森
-                      </div> 
-                     </div> 
+                            <option value="鼻水">鼻水</option>
+                            <option value="くしゃみ">くしゃみ</option>
+                            <option value="目のかゆみ">目のかゆみ</option>
+                        </div> 
                   </div>
                   
-                  <div class="ui grid">
-                    <div class="three wide column">
-                      <div class="ui selection dropdown"> 
-                         <input type="hidden" v-model="post.pref"> <i class="dropdown icon"></i> 
-                         <div class="menu"> 
-                          <div class="item" data-value="1">
-                           北海道
-                          </div> 
-                          <div class="item" data-value="2">
-                           青森
-                          </div> 
-                         </div> 
-                      </div>
-                    </div>
-                    <div class="three wide column">
-                      <div class="ui selection dropdown"> 
-                         <input type="hidden" v-model="post.pref"> <i class="dropdown icon"></i> 
-                         <div class="menu"> 
-                          <div class="item" data-value="1">
-                           北海道
-                          </div> 
-                          <div class="item" data-value="2">
-                           青森
-                          </div> 
-                         </div> 
-                      </div>
-                    </div>
+                  <div class="ui selection dropdown"> 
+                     <input type="hidden" v-model="post.symptom2"> <i class="dropdown icon"></i> 
+    
+                     <div class="menu"> 
+                            <option value="鼻水">鼻水</option>
+                            <option value="くしゃみ">くしゃみ</option>
+                            <option value="目のかゆみ">目のかゆみ</option>
+                        </div>  
+                  </div>
+                    <div class="ui selection dropdown"> 
+                     <input type="hidden" v-model="post.symptom3"> <i class="dropdown icon"></i> 
+    
+                     <div class="menu"> 
+                            <option value="鼻水">鼻水</option>
+                            <option value="くしゃみ">くしゃみ</option>
+                            <option value="目のかゆみ">目のかゆみ</option>
+                        </div> 
                   </div>
               
-                  <div class="ui grid">
-                    <div class="three wide column">
+
                       <div class="ui label fs08" style="fontsize:0.8em">
                         薬
                       </div>
                       <div class="ui selection dropdown"> 
-                         <input type="hidden" v-model="post.pref"> <i class="dropdown icon"></i> 
+                         <input type="hidden" v-model="post.medicien"> <i class="dropdown icon"></i> 
                          <div class="menu"> 
-                          <div class="item" data-value="1">
-                           北海道
-                          </div> 
-                          <div class="item" data-value="2">
-                           青森
-                          </div> 
-                         </div> 
+                            <option value="アレグラ">アレグラ</option>
+                            <option value="アレジオン">アレジオン</option>
+                            <option value="ビラノア">ビラノア</option>
+                        </div> 
                       </div>
-                    </div>
-                    <div class="three wide column">
-                      <input type="text" v-model="post.medicien"/>
-                    </div>
-                  </div>
+                    <input type="text" v-model="post.medicien"/>
+
 
                   <div class="ui label fs08" style="fontsize:0.8em">
                       メモ
@@ -219,7 +170,6 @@
                       <textarea rows="3" style="min-height:100px" class="massive" type="text" placeholder="あなたの投稿を発信しましょう" v-model="post.text"/>
                     </div>
                   </div>
-              </div>
 
               
             </div>
@@ -258,7 +208,7 @@ export default {
     return {
       post: {
         condition:1,
-        userId:"testUser",
+        userId:window.localStorage.getItem("userId"),
         pref:null,
         city:null,
         allergen1:null,
@@ -303,15 +253,34 @@ export default {
     
     
     posting_screen_display(){
-      this.postingScreen = true;
+        let elements = document.getElementsByClassName("modalWindow-background");
+        Array.prototype.forEach.call(elements, function (element) {
+            element.classList.add("view");
+            element.classList.remove("hide");
+        });
     },
     
     posting_screen_hide(){
-      this.postingScreen = false;
+        let elements = document.getElementsByClassName("modalWindow-background");
+        Array.prototype.forEach.call(elements, function (element) {
+            element.classList.add("hide");
+            element.classList.remove("view");
+            
+            let checkValue = '';
+
+
+            //this.post.pref = document.getElementById('prefSelect');
+              //console.log(this.post.userId);
+              //console.log(this.post.pref);
+        });
     },
     
     view_more_button(){
-      this.viewMore = !this.viewMore;
+       let elements = document.getElementsByClassName("more-field");
+        Array.prototype.forEach.call(elements, function (element) {
+            element.classList.toggle("view");
+            element.classList.toggle("hide");
+        });
     },
     
     view_more_button_text(){
@@ -431,8 +400,6 @@ export default {
 <style scoped>
 
 .modalWindow-background{
-  z-index:2;
-
   /*　画面を暗く　*/
   position:fixed;
   top:0;
@@ -446,6 +413,20 @@ export default {
   align-items: center;
   justify-content: center;
 
+}
+
+.hide{
+    z-index:-1;
+    opacity:0;
+    width: 0px;
+    height: 0px;
+}
+
+.view{
+    z-index:2;
+    opacity:1;
+    width: 100%;
+    height: 100%;
 }
 
 .modalWindow-content {
@@ -481,14 +462,34 @@ export default {
     cursor: pointer;
 }
 
-.condition-button.red{
-  background: #ffaaaa;
-  color: #000;
-}
 
-.condition-button input:checked+label{
-    background: #1a720d;
+.blue{
+    background: #0000cd;
     color: #FFF;
+    opacity:0.5;
+}
+.green{
+    background: #008000;
+    color: #FFF;
+    opacity:0.5;
+}
+.yellow{
+    background: #ffd700;
+    color: #FFF;
+    opacity:0.5;
+}
+.orange{
+    background: #ff8c00;
+    color: #FFF;
+    opacity:0.5;
+}
+.red{
+    background: #dc143c;
+    color: #FFF;
+    opacity:0.5;
+}
+.condition-button input:checked+label{
+    opacity:1;
 }
 .condition-button input{
     display: none;
