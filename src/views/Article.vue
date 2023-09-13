@@ -8,6 +8,7 @@
                 <form class="ui form" @submit.prevent="getSearchedArticle">…</form>
             </div>
             
+            
             <h2>投稿一覧</h2>
             <hr>
             <div class="ui card fluid">
