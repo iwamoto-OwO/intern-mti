@@ -1,4 +1,4 @@
-const { DynamoDBClient, PutItemCommand, ScanCommand } = require("@aws-sdk/client-dynamodb");
+const { DynamoDBClient, PutItemCommand, QueryCommand, ScanCommand } = require("@aws-sdk/client-dynamodb");
 const { marshall } = require("@aws-sdk/util-dynamodb");
 const { unmarshall } = require("@aws-sdk/util-dynamodb");
 const client = new DynamoDBClient({ region: "ap-northeast-1" });
@@ -21,20 +21,46 @@ exports.handler = async (event, context) => {
         return response;
     }
 
-    const param = {
-        TableName,
-    };
-
-    const command = new ScanCommand(param);
+    const hasQueryParams = event.queryStringParameters?.pref || event.queryStringParameters?.city || event.queryStringParameters?.allergen;
 
     try {
-        // client.send()でDBにデータを登録するコマンドを実行
-        const articles = (await client.send(command)).Items;
-        // TODO: 登録に成功した場合の処理を記載する。(status codeの設定と、response bodyの設定)
-        response.statusCode = 201;
-        const unmarshalledArticlesItems = articles.map((item) => unmarshall(item));
-        response.body = JSON.stringify({ articles: unmarshalledArticlesItems });
-        console.log(response.body);
+        let articles = [];
+        const scanParam = { TableName, Limit: 100 };
+        const data = await client.send(new ScanCommand(scanParam));
+        if (data && data.Items) {
+            articles = data.Items.map(item => unmarshall(item));
+            if(hasQueryParams){
+                articles = articles.filter(article => {
+                let isValid = true;
+                
+                if (event.queryStringParameters?.pref && article.pref  !== parseInt(event.queryStringParameters.pref)) isValid = false;
+                if (event.queryStringParameters?.city && article.city !== parseInt(event.queryStringParameters.city)) isValid = false;
+                
+                if(isValid == true){
+                    console.log("Article",article);
+                }
+                
+                if(article.allergen && event.queryStringParameters?.allergen){
+                    const result = checkValueMatch(JSON.parse(article.allergen), event.queryStringParameters.allergen);
+
+                    if (!result) isValid = false;
+                }
+    
+                return isValid;
+                });
+            };
+            
+        };
+            articles.forEach((article) => { 
+                if (article.allergen) {
+                    article.allergen = JSON.parse(article.allergen);
+                }
+                if (article.sympton) {
+                    article.sympton = JSON.parse(article.sympton);
+                }
+            });
+        
+        response.body = JSON.stringify({ articles });
     }
     catch (e) {
         console.error(e);
@@ -45,4 +71,15 @@ exports.handler = async (event, context) => {
         });
     }
     return response;
-}
+};
+
+const checkValueMatch = (obj, target) => {
+    for (let key in obj) {
+
+        if (obj[key] === target) {
+            return true;
+        }
+    }
+    return false;
+    
+};
