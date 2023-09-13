@@ -128,6 +128,7 @@ exports.handler = async (event, context) => {
         TableName,
         Item: marshall({
             userId,
+            password,
             pref,
             city,
             allergen,
@@ -143,8 +144,9 @@ exports.handler = async (event, context) => {
         // client.send()でDBにデータを登録するコマンドを実行
         await client.send(command);
         // TODO: 登録に成功した場合の処理を記載する。(status codeの設定と、response bodyの設定)
+        const token = "mtiToken"
         response.statusCode = 201;
-        response.body = JSON.stringify({ userId, pref, city,allergenWad, medicine });
+        response.body = JSON.stringify({ userId, pref, city,allergenWad, medicine, password, token});
 
     }
     catch (e) {
