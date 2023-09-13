@@ -327,36 +327,37 @@
       },
       
       async submit() {
-        if(this.user.Allergen1!=""&&(this.user.Allergen1==this.user.Allergen2||this.user.Allergen1==this.user.Allergen3||this.user.Allergen1==this.user.Allergen4||this.user.Allergen1==this.user.Allergen5||this.user.Allergen1==this.user.Allergen6||this.user.Allergen1==this.user.Allergen7)){
+        if(this.user.allergen1!=""&&(this.user.allergen1==this.user.allergen2||this.user.allergen1==this.user.allergen3||this.user.allergen1==this.user.allergen4||this.user.allergen1==this.user.allergen5||this.user.allergen1==this.user.allergen6||this.user.allergen1==this.user.allergen7)){
           this.sameError=true;
           window.scroll({top: 0, behavior: 'smooth'});
           return
         }
-        if(this.user.Allergen2!=""&&(this.user.Allergen2==this.user.Allergen3||this.user.Allergen2==this.user.Allergen4||this.user.Allergen2==this.user.Allergen5||this.user.Allergen2==this.user.Allergen6||this.user.Allergen2==this.user.Allergen7)){
+        if(this.user.allergen2!=""&&(this.user.allergen2==this.user.allergen3||this.user.allergen2==this.user.allergen4||this.user.allergen2==this.user.allergen5||this.user.allergen2==this.user.allergen6||this.user.allergen2==this.user.allergen7)){
           this.sameError=true;
           window.scroll({top: 0, behavior: 'smooth'});
           return
         }
-        if(this.user.Allergen3!=""&&(this.user.Allergen3==this.user.Allergen4||this.user.Allergen3==this.user.Allergen5||this.user.Allergen3==this.user.Allergen6||this.user.Allergen3==this.user.Allergen7)){
+        if(this.user.allergen3!=""&&(this.user.allergen3==this.user.allergen4||this.user.allergen3==this.user.allergen5||this.user.allergen3==this.user.allergen6||this.user.allergen3==this.user.allergen7)){
           this.sameError=true;
           window.scroll({top: 0, behavior: 'smooth'});
           return
         }
-        if(this.user.Allergen4!=""&&(this.user.Allergen4==this.user.Allergen5||this.user.Allergen4==this.user.Allergen6||this.user.Allergen4==this.user.Allergen7)){
+        if(this.user.allergen4!=""&&(this.user.allergen4==this.user.allergen5||this.user.allergen4==this.user.allergen6||this.user.allergen4==this.user.allergen7)){
           this.sameError=true;
           window.scroll({top: 0, behavior: 'smooth'});
           return
         }
-        if(this.user.Allergen5!=""&&(this.user.Allergen5==this.user.Allergen6||this.user.Allergen5==this.user.Allergen7)){
+        if(this.user.allergen5!=""&&(this.user.allergen5==this.user.allergen6||this.user.allergen5==this.user.allergen7)){
           this.sameError=true;
           window.scroll({top: 0, behavior: 'smooth'});
           return
         }
-        if(this.user.Allergen6!=""&&(this.user.Allergen6==this.user.Allergen7)){
+        if(this.user.allergen6!=""&&(this.user.allergen6==this.user.allergen7)){
           this.sameError=true;
           window.scroll({top: 0, behavior: 'smooth'});
           return
         }
+        this.sameError=false;
         if (this.isLogin) {
       
           
@@ -368,7 +369,7 @@
 
           try {
             /* global fetch */
-            const res = await fetch(baseUrl + "/user/signin", {
+            const res = await fetch(baseUrl + "/signin", {
               method: "POST",
               body: JSON.stringify(requestBody),
               // headers,
@@ -431,7 +432,7 @@
 
           try {
             /* global fetch */
-            const res = await fetch(baseUrl + "/user/signup", {
+            const res = await fetch(baseUrl + "/signup", {
               method: 'POST',
               body: JSON.stringify(reqBody)
               // headers,
@@ -450,6 +451,7 @@
             window.localStorage.setItem('token', jsonData.token);
             window.localStorage.setItem('userId', this.user.userId);
             console.log(jsonData);
+            this.$router.push({ name: 'Home'});
           } catch (e) {
             message(e);
             console.error(e);
