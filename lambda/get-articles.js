@@ -35,7 +35,6 @@ exports.handler = async (event, context) => {
         const unmarshalledArticlesItems = articles.map((item) => unmarshall(item));
         response.body = JSON.stringify({ articles: unmarshalledArticlesItems });
         console.log(response.body);
-
     }
     catch (e) {
         console.error(e);
