@@ -490,7 +490,7 @@
             // 成功時の処理
             window.localStorage.setItem('token', jsonData.token);
             window.localStorage.setItem('userId', this.user.userId);
-            console.log(jsonData);
+            console.log(jsonData)
             this.$router.push({ name: 'Home'});
           } catch (e) {
             message(e);
