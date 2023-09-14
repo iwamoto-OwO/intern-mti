@@ -7,3 +7,34 @@ input {
   height: 30px
 }
 
+.allergens {
+  display: flex;
+}
+
+.allergen {
+  margin-left: 20px !important;
+  
+}
+
+.condition {
+    width: 50px;           /* 幅を指定します */
+    height: 50px;          /* 高さを指定します */
+    font-weight: bold;
+    border-radius: 50%; /* ボーダーラジウスを50%にすることで、円形になります */
+    background-color: orange;
+    display: flex;
+    justify-content: center;  /* 水平方向の中央に配置 */
+    align-items: center;   
+
+}
+
+select {
+    width: 100%;     /* 横幅を200ピクセルに設定 */
+    height: 40px;     /* 縦幅を40ピクセルに設定 */
+    padding: 5px;     /* 内側の余白を追加して、テキストがギリギリにならないように */
+    border: 1px solid #ccc; /* 枠線を追加 */
+    border-radius: 5px; /* 角を少し丸く */
+    font-size: 16px;
+    margin: 5px;/* フォントサイズを16ピクセルに設定 */
+}
+

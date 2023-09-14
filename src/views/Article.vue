@@ -1,43 +1,117 @@
 <template>
     <div>
         <div class="ui main container">
-            <div class="ui segment">
-                <form class="ui form" @submit.prevent="postArticle">…</form>
-            </div>
-            <div class="ui segment">
-                <form class="ui form" @submit.prevent="getSearchedArticle">…</form>
-            </div>
+
+            <div class="ui yellow inverted segment">
+                <!--<form class="ui form" @submit.prevent="getSearchedArticle">-->
+
+                    <div>
+                            
+                            <div class="menu">
+                                <div><p>都道府県</p></div>
+                                <select>
+                                    <option :value="userPref">{{ selectedPref }}</option>
+                                    <option class="item" value="1">北海道</option>
+                                    <option class="item" value="2">青森</option>
+                                </select>
+                                
+                                <div><p>市区町村</p></div>
+                                <select>
+                                    <option :value="userCity">{{ selectedCity }}</option>
+                                    <option class="item" value="1">札幌</option>
+                                    <option class="item" value="2">青森</option>
+                                </select>
+                                
+                                <div><p>アルルギー</p></div>
+                                <select>
+                                    <option :value="allergen">{{ selectedAllergen }}</option>
+                                    <option value="1">スギ</option>
+                                    <option value="2">ヒノキ</option>
+                                    <option value="3">ブタクサ</option>
+                                    <option value="4">イネ科</option>
+                                    <option value="5">ヨモギ</option>
+                                    <option value="6">カナムグラ</option>
+                                    <option value="7">その他</option>
+                                </select>
+        
+                            </div>
+                        </div>
+                        
+                    </div>
+                    
+                    <div class="right-align">
+                        <button class="ui grey fluid button" type="submit" v-bind:disabled="SearchButtonDisable">
+                            絞り込み
+                        </button>
+                    </div>
+
+                <!--</form>-->
+            <!--</div>-->
             
-            <h2>投稿一覧</h2>
-            <hr>
-            <div class="ui card fluid">
-                <ul class="ui comments divided">
-                    <template v-for="(article, index) in articles">
-                        <li class="">
-                                <span>{{article.userId}}</span>
-                                <span class="meta">{{article.timestamp}}</span>
-                                <button class="ui red button right floated tiny" @click="deleteArticle(index)" type="submit" v-if="article.canDelete">
-                                削除
-                                </button>
-                                <div>{{article.text}}</div>
-                                <span class="ui green label">{{article.category}}</span>
-                        </li>
-                        <hr>
-                    </template>
-                </ul>
+
+            <div>
+                <h2 align="right">投稿件数{{articles.length}}件</h2>
+
+
             </div>
+            <hr>
+
+            <ul class="ui comments divided">
+
+                <template v-for="(article, index) in articles">
+                    <p>{{article.userId}}</p>
+                    <span class="meta">{{article.timestamp}}</span>
+                    <li>
+                        <div class="white ui segment">
+                            <span></span>
+
+                            <div class="allergens">
+                                <div class="condition"><p>{{article.condition}}</p></div>
+
+
+                                <div class="blue ui huge button allergen">{{article.allergen.allergen1}}</div>
+                                <div class="black ui huge button allergen">{{article.allergen.allergen2}}</div>
+                                <div class="black ui huge button allergen">{{article.allergen.allergen3}}</div>
+                            </div>
+                            <h3>地域</h3>
+                            <div>
+                                <div class="black ui button">{{article.pref}}</div>
+                                <div class="black ui button">{{article.city}}</div>
+
+                            </div>
+                            <h3>症状</h3>
+                            <div>
+                                <div class="green ui button">{{article.sympton.sympton1}}</div>
+                                <div class="green ui button">{{article.sympton.sympton2}}</div>
+                            </div>
+                            <h3>薬</h3>
+                            <div>
+                                <div class="pink ui button">{{article.medicine}}</div>
+                            </div>
+                        </div>
+
+                    </li>
+                </template>
+            </ul>
+
         </div>
+
     </div>
 </template>
+
 
 <script>
     // 必要なものはここでインポートする
     // @は/srcと同じ意味です
     // import something from '@/components/something.vue';
-    import { baseUrl } from '@/assets/config.js';
+    // import { baseUrl } from '@/assets/config.js';
 
     // const headers = {'Authorization' : 'mtiToken'};
+    import { baseUrl } from "@/assets/config.js";
 
+    const headers = { Authorization: "mtiToken" };
+    import '@/assets/style.css';
+    
     export default {
         name: 'Article',
 
@@ -49,106 +123,158 @@
             // Vue.jsで使う変数はここに記述する
             return {
                 post: {
-                    text: null,
-                    category: null,
-                },
-                search: {
                     userId: null,
-                    category: null,
-                    start: null,
-                    end: null,
+                    pref: null,
+                    city: null,
+                    allergen: null,
+                    condition: null,
+                    num: null,
+                    articles: null,
                 },
-                articles: [],
                 iam: null,
-                canDeleteList: [],
+                articles: [],
+                userPref: null,
+                selectedPref: null,
+                userCiy: null,
+                selectedCity: null,
+                allergen: null,
+                selectedAllergen: null,
+                allergenQuery: null,
+                // canDeleteList: [],
                 myUserId: window.localStorage.getItem("userId"),
             };
         },
+        computed: {
 
-  computed: {
-    // 計算した結果を変数として利用したいときはここに記述する
-  },
 
-  methods: {
-    // Vue.jsで使う関数はここで記述する
-    
-    async deleteArticle(index){
-      const headers = {'Authorization': 'mtiToken'};
-      
-      //テスト用
-      console.log(index);
-      console.log(this.myUserId);
-      console.log(this.articles[index].timestamp);
-  
-      try {
-        /* global fetch */
-        const res = await fetch(`${baseUrl}/user?userId=${this.myUserId}&iam=${this.articles[index].timestamp}`, {
-          method: "DELETE",
-          headers
-        });
-  
-        const text = await res.text();
-        const jsonData = text ? JSON.parse(text) : {};
-  
-        // fetchではネットワークエラー以外のエラーはthrowされないため、明示的にthrowする
-        if (!res.ok) {
-          const errorMessage = jsonData.message ?? "エラーメッセージがありません";
-            throw new Error(errorMessage);
+
+
+        },
+
+        created: async function() {
+            const headers = { 'Authorization': 'mtiToken' };
+            this.isCallingApi = true;
+            const allergens = ["スギ", "ヒノキ", "ブタクサ", "イネ科", "ヨモギ", "カナムグラ", "その他"];
+            
+            
+            try {
+                /* global fetch */
+                const res = await fetch(baseUrl + `/user?userId=${this.myUserId}`, {
+                    method: "GET",
+                    headers
+                });
+
+                const text = await res.text();
+                const jsonData = text ? JSON.parse(text) : {};
+
+                // fetchではネットワークエラー以外のエラーはthrowされないため、明示的にthrowする
+                if (!res.ok) {
+                    const errorMessage = jsonData.message ?? "エラーメッセージがありません";
+                    throw new Error(errorMessage);
+                }
+
+                // 成功時の処理
+                
+                this.userPref = jsonData.items[0].pref;
+                this.userCity = jsonData.items[0].city;
+                if(this.userPref == "1"){
+                    this.selectedPref = "北海道"; 
+                    this.selectedCity = "札幌";
+                }else{
+                    this.selectedPref = "青森"; 
+                    this.selectedCity = "青森";
+                }
+                
+                this.allergen = JSON.parse(jsonData.items[0].allergen);
+                this.selectedAllergen = allergens[this.allergen.allergenWad1.allergen1];
+                this.allergenQuery = allergens[this.allergen.allergenWad1.allergen1]
+                
+                console.log("After setting:", this.allergenQuery);
+                console.log(jsonData)
+            }
+            catch (e) {
+                console.error(e);
+                // エラー時の処理
+            };
+            
+            
+            
+            try {
+                const usl = baseUrl + `/articles?pref=${this.userPref}&city=${this.userCity}&allergen=${this.allergenQuery}`;
+                console.log(usl);
+                /* global fetch */
+                const res = await fetch(baseUrl + `/articles?/pref=${this.userPref}&city=${this.userCity}&allergen=${this.allergenQuery}`, {
+                    method: "GET",
+                    headers
+                });
+
+                const text = await res.text();
+                const jsonData = text ? JSON.parse(text) : {};
+
+                // fetchではネットワークエラー以外のエラーはthrowされないため、明示的にthrowする
+                if (!res.ok) {
+                    const errorMessage = jsonData.message ?? "エラーメッセージがありません";
+                    throw new Error(errorMessage);
+                }
+                
+                // 成功時の処理
+                console.log(jsonData);
+                this.articles = jsonData.articles;
+            }
+            catch (e) {
+                console.error(e);
+                // エラー時の処理
+            };
+            
+            
+
+
+
+        },
+
+        methods: {
+            
+
+            async getSearchedArticles() {
+                const { userId, pref, city, allergen } = this.search;
+                // const starttimestamp = start ? new Date(start).getTime() : "";
+                // const endtimestamp = end ? new Date(end).getTime() : "";
+                // const qs = "prefarence=" + prefarence + "City=" + city + "&allergen=" + (allergen ? allergen : "") + "&start=" + starttimestamp + "&end=" + endtimestamp;
+
+                try {
+
+                    const res = await fetch(baseUrl + "/article", {
+                        method: "GET",
+                        headers
+                        
+                    });
+
+                    const text = await res.text();
+                    const jsonData = text ? JSON.parse(text) : {};
+
+
+                    if (!res.ok) {
+                        const errorMessage = jsonData.message ?? "エラーメッセージがありません";
+                        throw new Error(errorMessage);
+                    }
+
+                    this.articles = jsonData.articles;
+                }
+                catch (e) {
+                    console.error(e);
+                }
+                return
+            },
+
+        },
+        // 記事を検索する
+
+        mounted: function() {
+            
         }
-      } catch (e) {
-        console.error(e);
-        // エラー時の処理
-      }
-      
-    }
-    
-  },
-  
-  created : async function(){
-    // リクエストボディを指定する
-        const headers = {'Authorization': 'mtiToken'};
-        this.isCallingApi = true;
-    
-        try {
-          /* global fetch */
-          const res = await fetch(baseUrl + '/Article', {
-            method: "GET",
-            headers
-          });
-    
-          const text = await res.text();
-          const jsonData = text ? JSON.parse(text) : {};
-    
-          // fetchではネットワークエラー以外のエラーはthrowされないため、明示的にthrowする
-          if (!res.ok) {
-            const errorMessage = jsonData.message ?? "エラーメッセージがありません";
-            throw new Error(errorMessage);
-          }
-    
-          // 成功時の処理
-          this.articles = jsonData.articles ?? [];
-          for(let i=0; i < this.articles.length; i++){
-              if(this.myUserId == this.articles[i].userId){
-                  this.articles[i].canDelete = true;
-              }else{
-                  this.articles[i].canDelete = false;
-              }
-              //console.log(this.articles[i].userId);
-              //console.log(this.articles[i].canDelete);
-          }
-          //console.log(this.articles);
-          
-          console.log(jsonData);
-        } catch (e) {
-          console.error(e);
-          // エラー時の処理
-        }
-  },
-  
- 
-  
-}
+    };
 </script>
 
 <style scoped>
+    /* このコンポーネントだけに適用するCSSはここに記述する */
 </style>
