@@ -61,24 +61,23 @@
                 <template v-for="(article, index) in articles">
                     <p>{{article.userId}}</p>
                     <span class="meta">{{article.timestamp}}</span>
-                    <li>
                         <div class="white ui segment">
                             <span></span>
 
                             <div class="allergens">
                                 <div class="condition"><p>{{article.condition}}</p></div>
 
-                                <div v-for="allergen in article.allergen" :key="allergen" v-if="allergen">{{ allergen }}</div>
+                                <div v-for="allergen in article.allergen" :key="allergen" v-if="sympton !== ''">{{ allergen }}</div>
                             </div>
                             <h3>地域</h3>
                             <div>
-                                <div class="black ui button">{{article.pref}}</div>
-                                <div class="black ui button">{{article.city}}</div>
+                                <div class="black ui button"><p>{{article.pref}}</p></div>
+                                <div class="black ui button"><p>{{article.city}}</p></div>
 
                             </div>
                             <h3>症状</h3>
                             <div>
-                                <div v-for="sympton in article.sympton" :key="sympton" v-if="sympton">{{ allergen }}</div>
+                                <div v-for="sympton in article.sympton" :key="sympton" v-if="sympton !== ''"><p>{{ sympton }}</p></div>
                                 <!--<div class="green ui button">{{article.sympton.sympton1}}</div>-->
                                 <!--<div class="green ui button">{{article.sympton.sympton2}}</div>-->
                             </div>
@@ -87,8 +86,6 @@
                                 <div class="pink ui button">{{article.medicine}}</div>
                             </div>
                         </div>
-
-                    </li>
                 </template>
             </ul>
 
@@ -136,6 +133,7 @@
                 userCiy: null,
                 selectedCity: null,
                 allergen: null,
+                sympton: null,
                 selectedAllergen: null,
                 allergenQuery: null,
                 // canDeleteList: [],
