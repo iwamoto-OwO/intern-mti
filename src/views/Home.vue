@@ -20,9 +20,23 @@
               
               <div class="condition-question">
                 <span class="ui center floated day-question">今日の花粉症状はどうですか？</span>
-                <button class="circular ui icon button small help-button" @click="helpButton()">
-                  <i class="icon question icon small"></i>
+                
+                <!--
+                <button class="circular ui icon button small help-button">
+                          <i class="icon question icon small"></i>
                 </button>
+                
+                <div class="tooltip">
+                    <div class="tooltip-content">
+                        大丈夫：花粉を感じない、症状が一切ない<br>
+                        微かに感じる：感じるが日常生活に支障はない。薬を飲むほどではない<br>
+                        ちょっと辛い：日常生活に多少支障がある。薬を飲めば何とかなる。<br>
+                      　辛い：日常生活に支障がある。薬を飲んでも症状が出る。<br>
+                        著しく辛い：日常生活に大いに支障がある。外に出ること自体危うくなる。
+                    </div>
+                  </div>
+                  -->
+                  
               </div>
           
           <!--conditionの値確認用
@@ -453,6 +467,14 @@ export default {
 
 .help-button{
   text-align: center;
+}
+
+.tooltip{
+    position: relative;
+
+    text-align: left;
+    background-color: #eeeeee;
+    padding: 5px;
 }
 
 .posting-button {
