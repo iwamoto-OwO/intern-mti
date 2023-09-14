@@ -68,10 +68,7 @@
                             <div class="allergens">
                                 <div class="condition"><p>{{article.condition}}</p></div>
 
-
-                                <div class="blue ui huge button allergen">{{article.allergen.allergen1}}</div>
-                                <div class="black ui huge button allergen">{{article.allergen.allergen2}}</div>
-                                <div class="black ui huge button allergen">{{article.allergen.allergen3}}</div>
+                                <div v-for="allergen in article.allergen" :key="allergen" v-if="allergen">{{ allergen }}</div>
                             </div>
                             <h3>地域</h3>
                             <div>
@@ -81,8 +78,9 @@
                             </div>
                             <h3>症状</h3>
                             <div>
-                                <div class="green ui button">{{article.sympton.sympton1}}</div>
-                                <div class="green ui button">{{article.sympton.sympton2}}</div>
+                                <div v-for="sympton in article.sympton" :key="sympton" v-if="sympton">{{ allergen }}</div>
+                                <!--<div class="green ui button">{{article.sympton.sympton1}}</div>-->
+                                <!--<div class="green ui button">{{article.sympton.sympton2}}</div>-->
                             </div>
                             <h3>薬</h3>
                             <div>
@@ -218,7 +216,7 @@
                 }
                 
                 // 成功時の処理
-                console.log(jsonData);
+                console.log("json",jsonData);
                 this.articles = jsonData.articles;
             }
             catch (e) {
