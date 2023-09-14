@@ -351,8 +351,8 @@
         },
         mounted: function() {
           /*global $*/
-            $('.ui.dropdown')
-              .dropdown();
+            //$('.ui.dropdown')
+              //.dropdown();
         },
 
         created: async function() {
@@ -476,16 +476,16 @@
         posting_screen_display(){
             let elements = document.getElementsByClassName("modalWindow-background");
             Array.prototype.forEach.call(elements, function (element) {
-                element.classList.toggle("view");
-                element.classList.toggle("hide");
+                element.classList.add("view");
+                element.classList.remove("hide");
             });
         },
         
         posting_screen_hide(){
             let elements = document.getElementsByClassName("modalWindow-background");
             Array.prototype.forEach.call(elements, function (element) {
-                element.classList.toggle("view");
-                element.classList.toggle("hide");
+                element.classList.remove("view");
+                element.classList.add("hide");
                 //this.post.pref = document.getElementById('prefSelect');
                   //console.log(this.post.userId);
                   //console.log(this.post.pref);
@@ -524,7 +524,8 @@
         },
         
          async postArticle() {// 記事を作成する
-                    const headers = {'Authorization' : window.localStorage.getItem('token')};
+                    //const headers = {'Authorization' : window.localStorage.getItem('token')};
+                    const headers = { 'Authorization': 'mtiToken' };
                     // リクエストボディを指定する
                     const userId = window.localStorage.getItem('userId');
                     const reqBody = {
@@ -543,10 +544,10 @@
                         medicine:this.post.medicine,
                         text:this.post.text,
                     };
-                    
+                    console.log(headers);
                     try {
                         /* global fetch */
-                        const res = await fetch(baseUrl + '/team1-Articles', {
+                        const res = await fetch(baseUrl + '/article', {
                             method: "POST",
                             body: JSON.stringify(reqBody),
                             headers,
